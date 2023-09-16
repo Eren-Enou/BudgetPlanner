@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <section>
+        <h2>Edit Budget: {{ form.instance.name }}</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save Changes</button>
+        </form>
+        
+        <div class="back-to-budget">
+            <a href="{% url 'budget_detail' form.instance.id %}">Back to Budget Details</a>
+        </div>
+    </section>
+{% endblock %}

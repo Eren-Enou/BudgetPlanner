@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <section>
+        <h2>Confirm Deletion</h2>
+        <p>Are you sure you want to delete the budget named "{{ budget.name }}"?</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="submit" value="Yes, Delete">
+        </form>
+        
+        <div class="back-to-budget">
+            <a href="{% url 'budget_detail' budget.id %}">No, Take Me Back</a>
+        </div>
+    </section>
+{% endblock %}

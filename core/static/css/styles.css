@@ -1,0 +1,72 @@
+/* Reset some default styles for a consistent appearance */
+body, h1, h2, h3, p, ul, li, a {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+}
+
+body {
+    background-color: #fb8bff;
+    color: #85daff;
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 20px;
+}
+
+header, nav, section, footer {
+    max-width: 1140px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 24px;
+    color: #0077CC;  /* A pleasant blue */
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    gap: 10px;
+}
+
+nav li {
+    display: inline;
+}
+
+nav a {
+    padding: 10px 15px;
+    background-color: #0077CC;
+    color: #fff;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #0055AA;
+}
+
+section {
+    margin-top: 20px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+}

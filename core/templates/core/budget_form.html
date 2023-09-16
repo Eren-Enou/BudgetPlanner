@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <section>
+        <h2>Create a New Budget</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save Budget</button>
+        </form>
+        
+        <div class="back-to-list">
+            <a href="{% url 'budget_list' %}">Back to Budget List</a>
+        </div>
+    </section>
+{% endblock %}

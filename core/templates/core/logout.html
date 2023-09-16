@@ -1,0 +1,9 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <section class="logout-section">
+        <h2>Logged Out</h2>
+        <p>You have been successfully logged out. Thank you for using Budget Planner!</p>
+        <a href="{% url 'login' %}">Click here to log in again</a>
+    </section>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <section>
+        <h2>Welcome to the Home Page</h2>
+        <p>This is a platform to help you plan and track your budget effectively.</p>
+
+        <!-- Navigation to the new pages -->
+        <nav>
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'budget_list' %}">View Budgets</a></li>
+                    <li><a href="{% url 'budget_create' %}">Create Budget</a></li>
+                    <!-- Assuming you want to allow expense creation directly from the homepage -->
+                    <li><a href="#">Create Expense</a></li> 
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'signup' %}">Signup</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <!-- You can add more content, images, links, etc. here -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+{% endblock %}

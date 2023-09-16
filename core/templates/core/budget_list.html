@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <section>
+        <h2>Your Budgets</h2>
+        
+        {% if budgets %}
+            <ul class="budget-list">
+                {% for budget in budgets %}
+                    <li>
+                        <a href="{% url 'budget_detail' budget.id %}">{{ budget.name }}</a>
+                        - Total Amount: ${{ budget.total_amount }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You haven't created any budgets yet.</p>
+        {% endif %}
+        
+        <div class="create-budget">
+            <a href="{% url 'budget_create' %}">Create New Budget</a>
+        </div>
+    </section>
+{% endblock %}
