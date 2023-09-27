@@ -1,37 +1,44 @@
 {% extends "core/base.html" %}
+{% load humanize %}
 
 {% block content %}
-    <section>
-        <h2>Details for Budget: {{ budget.name }}</h2>
-        <p><strong>Total Amount:</strong> ${{ budget.total_amount }}</p>
-        <p><strong>Description:</strong> {{ budget.description }}</p>
-        
-        <h3>Expenses</h3>
-        
-        {% if expenses %}
-            <ul class="expenses-list">
-                {% for expense in expenses %}
-                    <li>
-                        <strong>{{ expense.name }}</strong> - ${{ expense.amount }}
-                        <p>{{ expense.description }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No expenses recorded for this budget.</p>
-        {% endif %}
-        
-        <div class="budget-actions">
-            <a href="{% url 'edit_budget' budget.id %}" class="edit-btn">Edit Budget</a>
-            <a href="{% url 'delete_budget' budget.id %}" class="delete-btn">Delete Budget</a>
-        </div>
+<div class="content-wrapper">
+    <div class="content-left">
+        <section>
+            <h2>Details for Budget: {{ budget.name }}</h2>
+            <p><strong>Initial Amount:</strong> ${{ budget.initial_amount|intcomma }}</p>
+            <p><strong>Description:</strong> {{ budget.description }}</p>
+            
+            <h3>Expenses</h3>
+            
+            {% if expenses %}
+                <ul class="expenses-list">
+                    {% for expense in expenses %}
+                        <li>
+                            <strong>{{ expense.name }}</strong> - ${{ expense.amount|intcomma }}
+                            <p>{{ expense.description }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No expenses recorded for this budget.</p>
+            {% endif %}
+            
+            <div class="budget-actions">
+                <a href="{% url 'edit_budget' budget.id %}" class="edit-btn">Edit Budget</a>
+                <a href="{% url 'delete_budget' budget.id %}" class="delete-btn">Delete Budget</a>
+            </div>
 
-        <div class="add-expense">
-            <a href="{% url 'expense_create' budget.id %}">Add New Expense</a>
-        </div>
-        
-        <div class="back-to-list">
-            <a href="{% url 'budget_list' %}">Back to Budget List</a>
-        </div>
-    </section>
+            <div class="add-expense">
+                <a href="{% url 'expense_create' budget.id %}">Add New Expense</a>
+            </div>
+            
+            <div class="back-to-list">
+                <a href="{% url 'budget_list' %}">Back to Budget List</a>
+            </div>
+        </section>
+    </div>
+    <div class="graph">
+        {{ plot_div|safe }}
+    </div>
 {% endblock %}

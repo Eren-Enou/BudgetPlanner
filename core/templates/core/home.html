@@ -28,4 +28,20 @@
             <input type="submit" value="Submit">
         </form>
     </section>
+    <section>
+        {% if latest_budget %}
+            <h2>Monthly Overview for {{ latest_budget.name }}</h2>
+            <p>Total Amount: {{ latest_budget.total_amount }}</p>
+            <h3>Expenses</h3>
+            <ul>
+            {% for expense in expenses %}
+                <li>{{ expense.name }}: {{ expense.amount }}</li>
+            {% empty %}
+                <li>No expenses recorded for this budget.</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No budget recorded.</p>
+        {% endif %}
+    </section>
 {% endblock %}

@@ -6,7 +6,7 @@ from django.dispatch import receiver
 class Budget(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    initial_amount = models.DecimalField(max_digits=10, decimal_places=2)
     amount_spent = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     creation_date = models.DateField(auto_now_add=True)
     description = models.TextField(blank=True)  # Added description field
@@ -15,10 +15,25 @@ class Budget(models.Model):
         return self.name
 
 class Expense(models.Model):
+    class CategoryChoices(models.TextChoices):
+        GROCERIES = 'GR', 'Groceries'
+        TRANSPORT = 'TR', 'Transport'
+        ENTERTAINMENT = 'EN', 'Entertainment'
+        UTILITIES = 'UT', 'Utilities'
+        RENT = 'RE', 'Rent'
+        HEALTH = 'HE', 'Health'
+        OTHER = 'OT', 'Other'
+        TRAVEL = 'TV', 'Travel'
+        EDUCATION = 'ED', 'Education'
+        SAVINGS = 'SV', 'Savings'
+        SUBSCRIPTIONS = 'SB', 'Subscriptions'
+        # Add more categories as needed
+
     budget = models.ForeignKey(Budget, related_name='expenses', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
+    category = models.CharField(max_length=2, choices=CategoryChoices.choices, default=CategoryChoices.OTHER)
     description = models.TextField(blank=True)  # Added description field
 
     def __str__(self):

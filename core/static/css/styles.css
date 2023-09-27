@@ -70,3 +70,18 @@ footer {
     font-size: 14px;
     color: #888;
 }
+
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content-left {
+    float: left;
+    width: 48%;  /* Adjust as needed */
+}
+
+.graph {
+    float: right;
+    width: 48%;
+}

@@ -1,21 +1,24 @@
 {% extends "core/base.html" %}
+{% load humanize %}
 
 {% block content %}
     <section>
         <h2>Your Budgets</h2>
         
-        {% if budgets %}
+        {% if budgets_with_remaining %}
             <ul class="budget-list">
-                {% for budget in budgets %}
+                {% for budget_info in budgets_with_remaining %}
                     <li>
-                        <a href="{% url 'budget_detail' budget.id %}">{{ budget.name }}</a>
-                        - Total Amount: ${{ budget.total_amount }}
+                        <a href="{% url 'budget_detail' budget_info.budget.id %}">{{ budget_info.budget.name }}</a>
+                        - Initial Amount: ${{ budget_info.budget.initial_amount|intcomma }}
+                        - Remaining Amount: ${{ budget_info.remaining|intcomma }}
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
             <p>You haven't created any budgets yet.</p>
         {% endif %}
+
         
         <div class="create-budget">
             <a href="{% url 'budget_create' %}">Create New Budget</a>
