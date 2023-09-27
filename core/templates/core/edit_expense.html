@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <section>
+        <h2>Edit Expense: {{ form.instance.name }}</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save Changes</button>
+        </form>
+        
+        <div class="back-to-budget">
+            <!-- Note: the back link now redirects to the budget detail page for the budget associated with the expense -->
+            <a href="{% url 'budget_detail' form.instance.budget.id %}">Back to Budget Details</a>
+        </div>
+    </section>
+{% endblock %}

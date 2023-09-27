@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% load humanize %}
+
+{% block content %}
+    <section>
+        <h2>Confirm Delete Expense</h2>
+        
+        <p>Are you sure you want to delete the expense named "{{ expense.name }}" worth ${{ expense.amount|intcomma }}?</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Yes, Delete</button>
+            <!-- Redirect to the budget detail page for the budget associated with the expense -->
+            <a href="{% url 'budget_detail' expense.budget.id %}" class="cancel-btn">No, Cancel</a>
+        </form>
+    </section>
+{% endblock %}

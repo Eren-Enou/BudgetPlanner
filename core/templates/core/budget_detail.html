@@ -8,15 +8,18 @@
             <h2>Details for Budget: {{ budget.name }}</h2>
             <p><strong>Initial Amount:</strong> ${{ budget.initial_amount|intcomma }}</p>
             <p><strong>Description:</strong> {{ budget.description }}</p>
-            
+            <p><strong>Amount Spent:</strong> ${{ budget.amount_spent|intcomma }}</p>
+            <p><strong>Amount Remaining:</strong> ${{ amount_remaining|intcomma }}</p>
+
             <h3>Expenses</h3>
             
             {% if expenses %}
                 <ul class="expenses-list">
                     {% for expense in expenses %}
                         <li>
-                            <strong>{{ expense.name }}</strong> - ${{ expense.amount|intcomma }}
-                            <p>{{ expense.description }}</p>
+                            <strong>{{ expense.name }}</strong> - ${{ expense.amount|intcomma }} on {{ expense.date }} for {{ expense.description }}
+                            <a href="{% url 'edit_expense' expense.id %}">Edit</a> |
+                            <a href="{% url 'delete_expense' expense.id %}">Delete</a>
                         </li>
                     {% endfor %}
                 </ul>

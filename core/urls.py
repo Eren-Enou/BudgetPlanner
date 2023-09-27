@@ -16,7 +16,8 @@ urlpatterns = [
     path('budgets/<int:budget_id>/edit/', budget_views.edit_budget, name='edit_budget'),
     path('budgets/<int:budget_id>/delete/', budget_views.delete_budget, name='delete_budget'),
     path('budgets/<int:budget_id>/expense/', expense_views.expense_create, name='expense_create'),
-
+    path('expenses/<int:expense_id>/edit/', expense_views.edit_expense, name='edit_expense'),
+    path('expenses/<int:expense_id>/delete/', expense_views.delete_expense, name='delete_expense'),
 ]
 
 if settings.DEBUG:  # Only serve media files in development

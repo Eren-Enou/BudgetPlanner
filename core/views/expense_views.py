@@ -20,3 +20,20 @@ def expense_create(request, budget_id):
         form = ExpenseForm()
     return render(request, 'core/expense_form.html', {'form': form, 'budget': budget})
 
+def edit_expense(request, expense_id):
+    expense = get_object_or_404(Expense, id=expense_id)
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST, instance=expense)
+        if form.is_valid():
+            form.save()
+            return redirect('budget_detail', budget_id=expense.budget.id)
+    else:
+        form = ExpenseForm(instance=expense)
+    return render(request, 'core/edit_expense.html', {'form': form})
+
+def delete_expense(request, expense_id):
+    expense = get_object_or_404(Expense, id=expense_id)
+    if request.method == 'POST':
+        expense.delete()
+        return redirect('budget_detail', budget_id=expense.budget.id)
+    return render(request, 'core/confirm_delete_expense.html', {'expense': expense})

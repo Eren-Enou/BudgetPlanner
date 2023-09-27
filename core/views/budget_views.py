@@ -79,6 +79,7 @@ def budget_detail(request, budget_id):
 
     # Get all the expenses associated with the fetched budget.
     expenses = budget.expenses.all()
+    amount_remaining = budget.initial_amount - budget.amount_spent
 
     # Create a bar chart using Plotly with two bars: one for total expenses and another for the initial budget amount.
     # The bars are colored red for expenses and green for the initial budget for visual differentiation.
@@ -97,7 +98,7 @@ def budget_detail(request, budget_id):
     div = opy.plot(figure, auto_open=False, output_type='div')
 
     # Render the 'core/budget_detail.html' template with the budget, associated expenses, and the embedded plot.
-    return render(request, 'core/budget_detail.html', {'budget': budget, 'expenses': expenses, 'plot_div': div})
+    return render(request, 'core/budget_detail.html', {'budget': budget, 'expenses': expenses, 'plot_div': div, 'amount_remaining':amount_remaining})
 
 def edit_budget(request, budget_id):
     budget = get_object_or_404(Budget, id=budget_id)
