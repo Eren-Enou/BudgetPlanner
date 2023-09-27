@@ -1,0 +1,60 @@
+{% extends "core/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Welcome to Your Budget Dashboard, {{ user.username }}!</h1>
+
+    <div class="dashboard-overview">
+        <h2>Overview</h2>
+        <div class="overview-item">
+            <h3>Total Expenses</h3>
+            <p>${{ total_expenses|intcomma }}</p>
+        </div>
+
+        <div class="overview-item">
+            <h3>Total Savings</h3>
+            <p>${{ total_savings|intcomma }}</p>
+        </div>
+
+        <div class="overview-item">
+            <h3>Upcoming Bills</h3>
+            <ul>
+                {% for bill in upcoming_bills %}
+                <li>{{ bill.name }}: ${{ bill.amount|intcomma }} (Due on {{ bill.due_date }})</li>
+                {% empty %}
+                <li>No upcoming bills.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="dashboard-graphs">
+        <h2>Financial Trends</h2>
+        <!-- Placeholder for any graphs/charts -->
+        <div class="expense-trends">
+            <!-- Integrate a charting library to show trends in expenses over time -->
+        </div>
+    </div>
+
+    <div class="dashboard-goals">
+        <h2>Your Savings Goals</h2>
+        <!-- Placeholder for savings goal progress bars or other visual representations -->
+        {% for goal in savings_goals %}
+        <div class="goal-item">
+            <h4>{{ goal.name }}</h4>
+            <div class="goal-progress">
+                <!-- Use CSS or a library to create a progress bar representation -->
+                {{ goal.progress_percentage }}%
+            </div>
+            <p>Target: ${{ goal.target_amount|intcomma }} | Saved: ${{ goal.saved_amount|intcomma }}</p>
+        </div>
+        {% empty %}
+        <p>You haven't set any savings goals yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Any other sections can be added below, such as a section for recent transactions, financial advice, etc. -->
+
+</div>
+{% endblock %}

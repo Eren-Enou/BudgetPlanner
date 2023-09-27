@@ -16,7 +16,8 @@ def home(request):
     if request.user.is_authenticated:
 
         # Fetch the latest budget associated with the current user based on its creation date.
-        latest_budget = Budget.objects.filter(user=request.user).order_by('creation_date').first()
+        latest_budget = Budget.objects.filter(user=request.user).order_by('-id').first()
+
 
         # If there's a latest budget, fetch the associated expenses; otherwise, set expenses to an empty list.
         if latest_budget:
@@ -96,6 +97,8 @@ def budget_detail(request, budget_id):
     # Convert the figure to a div element so it can be embedded in the Django template. 
     # This will not automatically open a new tab/window for the plot.
     div = opy.plot(figure, auto_open=False, output_type='div')
+
+    request.session['last_accessed_budget'] = budget_id
 
     # Render the 'core/budget_detail.html' template with the budget, associated expenses, and the embedded plot.
     return render(request, 'core/budget_detail.html', {'budget': budget, 'expenses': expenses, 'plot_div': div, 'amount_remaining':amount_remaining})

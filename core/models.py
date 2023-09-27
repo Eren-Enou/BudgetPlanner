@@ -29,12 +29,23 @@ class Expense(models.Model):
         SUBSCRIPTIONS = 'SB', 'Subscriptions'
         # Add more categories as needed
 
+    class FrequencyChoices(models.TextChoices):
+        WEEKLY = 'WK', 'Weekly'
+        BIWEEKLY = 'BW', 'Bi-weekly'
+        MONTHLY = 'MN', 'Monthly'
+        QUARTERLY = 'QR', 'Quarterly'
+        YEARLY = 'YR', 'Yearly'
+    
     budget = models.ForeignKey(Budget, related_name='expenses', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
     category = models.CharField(max_length=2, choices=CategoryChoices.choices, default=CategoryChoices.OTHER)
-    description = models.TextField(blank=True)  # Added description field
+    description = models.TextField(blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_recurring = models.BooleanField(default=False)
+    frequency = models.CharField(max_length=2, choices=FrequencyChoices.choices, blank=True, null=True)
+    next_due_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -55,6 +66,7 @@ class Profile(models.Model):
     skills = models.TextField(blank=True)
     join_date = models.DateField(auto_now_add=True)
     is_public = models.BooleanField(default=True)
+    last_accessed_budget = models.ForeignKey(Budget, null=True, blank=True, on_delete=models.SET_NULL)
 
     THEME_CHOICES = [
     ('light', 'Light Mode'),

@@ -11,8 +11,13 @@
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'budget_list' %}">View Budgets</a></li>
                     <li><a href="{% url 'budget_create' %}">Create Budget</a></li>
-                    <!-- Assuming you want to allow expense creation directly from the homepage -->
-                    <li><a href="#">Create Expense</a></li> 
+                    <!-- Check if latest_budget exists, if so use its ID for the expense create URL -->
+                    {% if latest_budget %}
+                    <li><a href="{% url 'expense_create' budget_id=latest_budget.id %}">Create Expense</a></li>
+                    {% else %}
+                        <!-- Placeholder link if there's no latest_budget -->
+                        <li><a href="#">Create Expense</a></li>
+                    {% endif %}
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>

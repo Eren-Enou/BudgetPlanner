@@ -18,6 +18,9 @@ urlpatterns = [
     path('budgets/<int:budget_id>/expense/', expense_views.expense_create, name='expense_create'),
     path('expenses/<int:expense_id>/edit/', expense_views.edit_expense, name='edit_expense'),
     path('expenses/<int:expense_id>/delete/', expense_views.delete_expense, name='delete_expense'),
+    path('expenses/<int:expense_id>/delete/', expense_views.delete_expense, name='delete_expense'),
+    path('dashboard/', auth_views.dashboard_view, name='dashboard'),
+    path('expense/create/<int:budget_id>/', expense_views.expense_create, name='expense_create'),
 ]
 
 if settings.DEBUG:  # Only serve media files in development

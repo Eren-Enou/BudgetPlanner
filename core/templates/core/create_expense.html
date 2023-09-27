@@ -1,0 +1,34 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="content-wrapper">
+    <section>
+        <h2>Create Expense for Budget: {{ budget.name }}</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Display form errors if any -->
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Oops!</strong> There were some problems with your submission.
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Render form fields -->
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-primary">Create Expense</button>
+        </form>
+
+        <div class="back-to-budget">
+            <a href="{% url 'budget_detail' budget.id %}">Back to Budget Details</a>
+        </div>
+    </section>
+</div>
+{% endblock %}

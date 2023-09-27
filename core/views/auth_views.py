@@ -1,9 +1,13 @@
-from django.contrib.auth.models import User
+
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from django.db import models
+
 from core.forms import ProfileForm
-from core.models import Profile
+from core.models import Profile, Expense, Budget
 
 def login_view(request):
     # Check if the request method is POST, which indicates a login attempt.
@@ -88,3 +92,28 @@ def edit_profile(request):
     }
 
     return render(request, 'core/edit_profile.html', context)
+
+@login_required
+def dashboard_view(request):
+    # Fetch all expenses for the currently logged in user
+    user_expenses = Expense.objects.filter(user=request.user)
+    
+    # Calculate the total expenses for the user
+    total_expenses = user_expenses.aggregate(models.Sum('amount'))['amount__sum'] or 0
+
+    # Fetch all budgets related to the user
+    user_budgets = Budget.objects.filter(user=request.user)
+
+    # Calculate total savings (remaining amounts for all budgets)
+    total_savings = sum([budget.initial_amount - (budget.expenses.aggregate(models.Sum('amount'))['amount__sum'] or 0) for budget in user_budgets])
+    
+
+    context = {
+        'total_expenses': total_expenses,
+        'total_savings': total_savings,
+        # 'upcoming_bills': upcoming_bills,
+        # 'savings_goals': savings_goals,
+        # ... add more context data as needed
+    }
+
+    return render(request, 'core/dashboard.html', context)
