@@ -1,0 +1,73 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <section class="create-bill-section">
+        <h2>Add a New Bill</h2>
+        
+        <form method="post" action="{% url 'create_bill' %}">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="billName">Bill Name</label>
+                <input type="text" id="billName" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="billAmount">Amount ($)</label>
+                <input type="number" id="billAmount" name="amount_due" class="form-control" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="dueDate">Due Date</label>
+                <input type="date" id="dueDate" name="due_date" class="form-control" required>
+            </div>
+
+            <!-- Added category field -->
+            <div class="form-group">
+                <label for="billCategory">Category</label>
+                <select id="billCategory" name="category" class="form-control" required>
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="rent">Rent</option>
+                    <option value="utilities">Utilities</option>
+                    <option value="subscriptions">Subscriptions</option>
+                    <!-- Add more categories as needed -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="isRecurring">Is this a Recurring Bill?</label>
+                <input type="checkbox" id="isRecurring" name="is_recurring" class="form-control">
+            </div>
+
+            <div class="form-group" id="frequencyDiv" style="display: none;">
+                <label for="frequency">Frequency</label>
+                <select id="frequency" name="frequency" class="form-control">
+                    <option value="weekly">Weekly</option>
+                    <option value="bi-weekly">Bi-Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="yearly">Yearly</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea id="notes" name="notes" class="form-control" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Bill</button>
+        </form>
+        
+        <script type="text/javascript">
+            // JavaScript to toggle the frequency dropdown based on whether the bill is recurring
+            document.getElementById('isRecurring').addEventListener('change', function() {
+                var frequencyDiv = document.getElementById('frequencyDiv');
+                this.checked ? frequencyDiv.style.display = 'block' : frequencyDiv.style.display = 'none';
+            });
+        </script>
+
+        <div class="back-to-dashboard">
+            <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+        </div>
+    </section>
+{% endblock %}

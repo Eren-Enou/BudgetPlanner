@@ -21,13 +21,22 @@
             <h3>Upcoming Bills</h3>
             <ul>
                 {% for bill in upcoming_bills %}
-                <li>{{ bill.name }}: ${{ bill.amount|intcomma }} (Due on {{ bill.due_date }})</li>
+                <li>{{ bill.name }}: ${{ bill.amount_due|intcomma }} (Due on {{ bill.due_date }})</li>
                 {% empty %}
                 <li>No upcoming bills.</li>
                 {% endfor %}
             </ul>
         </div>
     </div>
+
+    <h3>Incomes</h3>
+    <ul>
+        {% for income in incomes %}
+            <li>{{ income.source }}: ${{ income.amount }} on {{ income.date }}</li>
+        {% empty %}
+            <li>No incomes recorded.</li>
+        {% endfor %}
+    </ul>
 
     <div class="dashboard-graphs">
         <h2>Financial Trends</h2>

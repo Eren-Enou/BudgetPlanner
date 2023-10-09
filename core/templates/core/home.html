@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load humanize %}
 
 {% block content %}
     <section>
@@ -12,12 +13,15 @@
                     <li><a href="{% url 'budget_list' %}">View Budgets</a></li>
                     <li><a href="{% url 'budget_create' %}">Create Budget</a></li>
                     <!-- Check if latest_budget exists, if so use its ID for the expense create URL -->
-                    {% if latest_budget %}
-                    <li><a href="{% url 'expense_create' budget_id=latest_budget.id %}">Create Expense</a></li>
+                    {% if selected_budget %}  <!-- Changed from latest_budget to selected_budget -->
+                        <li><a href="{% url 'expense_create' budget_id=selected_budget.id %}">Create Expense</a></li>
                     {% else %}
-                        <!-- Placeholder link if there's no latest_budget -->
-                        <li><a href="#">Create Expense</a></li>
+                        <!-- Placeholder link if there's no selected_budget -->
+                        <li><a href="#">Something went wrong</a></li>
                     {% endif %}
+                    <li><a href="{% url 'view_income' %}">View Incomes</a></li>
+                    <li><a href="{% url 'create_bill' %}">Create Bill</a></li>
+                    <li><a href="{% url 'add_income' %}">Create Income</a></li>   
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
@@ -34,19 +38,73 @@
         </form>
     </section>
     <section>
-        {% if latest_budget %}
-            <h2>Monthly Overview for {{ latest_budget.name }}</h2>
-            <p>Total Amount: {{ latest_budget.total_amount }}</p>
-            <h3>Expenses</h3>
-            <ul>
+        <form method="get" action="{% url 'home' %}">
+            <label for="budgets">Select a budget:</label>
+            <select id="budgets" name="budget_id" onchange="updateTotalAmount()">
+                <option value="" disabled {% if not selected_budget %}selected{% endif %}>Select a budget</option>
+                {% for budget in all_budgets %}
+                    <option value="{{ budget.id }}" {% if budget.id == selected_budget.id %}selected{% endif %}>
+                        {{ budget.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+
+        <h2 id="budgetName">Overview for {{ selected_budget.name }}</h2>
+        <p>Remaining Amount: $<span id="totalAmount">{{ total_amount|intcomma }}</span></p>
+        <h3 id="expensesHeader">Expenses for {{ selected_budget.name }} </h3>
+        <ul id="expensesList">
             {% for expense in expenses %}
-                <li>{{ expense.name }}: {{ expense.amount }}</li>
+                <li>{{ expense.name }}: ${{ expense.amount|intcomma }}</li>
             {% empty %}
                 <li>No expenses recorded for this budget.</li>
             {% endfor %}
+        </ul>
+
+        {% comment %} {% if selected_budget %}
+            <h2>Overview for {{ selected_budget.name }}</h2>
+            <p>Total Amount: <span id="totalAmount">{{ selected_budget.total_amount }}</span></p>
+
+            <h3>Expenses</h3>
+            <ul>
+                {% for expense in expenses %}
+                    <li>{{ expense.name }}: {{ expense.amount }}</li>
+                {% empty %}
+                    <li>No expenses recorded for this budget.</li>
+                {% endfor %}
             </ul>
         {% else %}
             <p>No budget recorded.</p>
-        {% endif %}
+        {% endif %} {% endcomment %}
     </section>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateTotalAmount() {
+            var selectedBudgetId = $('#budgets').val();
+            $.ajax({
+                url: '/get_budget_data/' + selectedBudgetId + '/',
+                method: 'GET',
+                success: function(data) {
+                    $('#totalAmount').text(parseFloat(data.total_amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                    $('#budgetName').text('Overview for ' + data.budget_name);
+                    $('#expensesList').empty();  // Clear the current list of expenses
+    
+                    if (data.expenses.length > 0) {  // Check if there are expenses
+                        $('#expensesHeader').text('Expenses for ' + data.budget_name);
+                        data.expenses.forEach(function(expense) {
+                            // Formatting the expense amount with comma separators
+                            $('#expensesList').append('<li>' + expense.name + ': $' + parseFloat(expense.amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</li>');
+                        });
+                    } else {
+                        $('#expensesHeader').text('No expenses recorded for ' + data.budget_name);
+                    }
+                    
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
 {% endblock %}

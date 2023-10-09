@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import budget_views, expense_views, auth_views  # and any other modules you have
+from .views import budget_views, expense_views, auth_views, income_views  # and any other modules you have
 
 urlpatterns = [
     path('', budget_views.home, name='home'),
@@ -21,6 +21,15 @@ urlpatterns = [
     path('expenses/<int:expense_id>/delete/', expense_views.delete_expense, name='delete_expense'),
     path('dashboard/', auth_views.dashboard_view, name='dashboard'),
     path('expense/create/<int:budget_id>/', expense_views.expense_create, name='expense_create'),
+    path('create-bill/', expense_views.create_bill, name='create_bill'),
+    path('get_total_amount/<int:budget_id>/', budget_views.get_total_amount, name='get_total_amount'),
+    path('get_budget_data/<int:budget_id>/', budget_views.get_budget_data, name='get_budget_data'),
+    path('add_income/', income_views.add_income, name='add_income'),
+    path('view-income/', income_views.view_income, name='view_income'),
+    path('edit-income/<int:income_id>/', income_views.edit_income, name='edit_income'),
+    path('delete-income/<int:income_id>/', income_views.delete_income, name='delete_income'),
+    
+    
 ]
 
 if settings.DEBUG:  # Only serve media files in development

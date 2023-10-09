@@ -88,3 +88,24 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
+    
+class Bill(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    amount_due = models.DecimalField(max_digits=10, decimal_places=2)
+    due_date = models.DateField()
+    is_paid = models.BooleanField(default=False)
+    category = models.CharField(max_length=255, blank=True, null=True)  # Optional field for bill categorization
+    notes = models.TextField(blank=True, null=True)  # Optional field for any additional information or notes
+
+    def __str__(self):
+        return f"{self.name} - ${self.amount_due}"
+    
+class Income(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    source = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
+
+    def __str__(self):
+        return f'{self.source} - {self.amount}'

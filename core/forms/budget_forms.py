@@ -11,3 +11,4 @@ class BudgetForm(forms.ModelForm):
             'amount_spent': forms.NumberInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
+        

@@ -5,9 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from django.db import models
+from django.utils import timezone
 
 from core.forms import ProfileForm
-from core.models import Profile, Expense, Budget
+from core.models import Profile, Expense, Budget, Bill, Income
+
 
 def login_view(request):
     # Check if the request method is POST, which indicates a login attempt.
@@ -95,23 +97,28 @@ def edit_profile(request):
 
 @login_required
 def dashboard_view(request):
-    # Fetch all expenses for the currently logged in user
+    # Fetch all expenses and budgets for the currently logged in user
     user_expenses = Expense.objects.filter(user=request.user)
-    
+    user_budgets = Budget.objects.filter(user=request.user)
+
     # Calculate the total expenses for the user
     total_expenses = user_expenses.aggregate(models.Sum('amount'))['amount__sum'] or 0
-
-    # Fetch all budgets related to the user
-    user_budgets = Budget.objects.filter(user=request.user)
+    
+    # Fetch upcoming bills
+    today = timezone.now().date()
+    upcoming_bills = Bill.objects.filter(user=request.user, due_date__gte=today).order_by('due_date')
 
     # Calculate total savings (remaining amounts for all budgets)
     total_savings = sum([budget.initial_amount - (budget.expenses.aggregate(models.Sum('amount'))['amount__sum'] or 0) for budget in user_budgets])
-    
+
+    incomes = Income.objects.filter(user=request.user)
 
     context = {
         'total_expenses': total_expenses,
         'total_savings': total_savings,
-        # 'upcoming_bills': upcoming_bills,
+        'upcoming_bills': upcoming_bills,
+        'all_budgets': user_budgets,
+        'incomes': incomes,
         # 'savings_goals': savings_goals,
         # ... add more context data as needed
     }
